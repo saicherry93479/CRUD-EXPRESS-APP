@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <script
+      src="https://kit.fontawesome.com/4ce7c17e96.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="container">
+      <main>
+        <div>
+          <h1 class="header">CRUD APP</h1>
+          <div>
+            <form action="" method="POST">
+              <input
+                type="text"
+                name="name"
+                maxlength="30"
+                minlength="6"
+                required
+              />
+              <input type="submit" />
+            </form>
+            <select onchange="changeHandler(this)" id="selectID">
+              <option value="All">All</option>
+
+              <option value="COMPLETED">Completed</option>
+              <option value="DELETED">Deleted</option>
+              <option value="ACTIVE">Active</option>
+            </select>
+          </div>
+        </div>
+        <% if(data.length==0) { %>
+        <div class="noData"><h1>NO DATA FOUND !!!</h1></div>
+        <% } %> <% if(valid=="errorInsert") { %>
+        <div class="dataError"><h1>Unable to add !!!</h1></div>
+        <% } %> <% if(valid=="errorUpdate") { %>
+        <div class="dataError"><h1>Problem in server!!!</h1></div>
+        <% } %> <% if(valid=="errorDelete") { %>
+        <div class="dataError"><h1>Unable to delete!!!</h1></div>
+        <% } %>
+        <section>
+          <% data.forEach((data,index)=>{ %>
+          <div
+            class="dataItem <%= data.completed==true?' completed':'' %> <%= data.deleted==true?' deleted':'' %>"
+          >
+            <p><%= index %></p>
+            <p>
+              <%= data.timeStamp.getMonth()+1 %>-<%= data.timeStamp.getDate() %>
+            </p>
+            <% if(data.completed==true) { %>
+            <p>
+              <del><%= data.name %></del>
+            </p>
+            <a style="cursor: pointer" href="/completeUndo/<%= data._id %>/">
+              <button class="undoButton green">Undo</button>
+            </a>
+            <% } else if(data.deleted==true) { %>
+
+            <p>DEL ( <%= data.name %> )</p>
+            <a style="cursor: pointer" href="/deleteUndo/<%= data._id %>/">
+              <button class="undoButton red">Undo</button>
+            </a>
+            <% } else { %>
+
+            <p><%= data.name %></p>
+
+            <a href="/completed/<%= data._id %>/">
+              <i class="fa-solid fa-circle-check"></i
+            ></a>
+            <a href="/deleted/<%= data._id %>/">
+              <i class="fa-solid fa-trash"></i
+            ></a>
+            <% } %>
+          </div>
+          <% }) %>
+        </section>
+      </main>
+    </div>
+    <script src="/js/main.js"></script>
+  </body>
+</html>
